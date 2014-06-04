@@ -614,7 +614,7 @@ double HypoTestInverterResult::GetGraphX(const TGraph & graph, double y0, bool l
    bool ret = brf.Solve(100, 1.E-6, 1.E-6);
    if (!ret) { 
       ooccoutE(this,Eval) << "HypoTestInverterResult - interpolation failed - return inf" << std::endl;
-         return TMath::Infinity();
+         return std::numeric_limits<Double_t>::infinity();
    }
    double limit =  brf.Root();
 
