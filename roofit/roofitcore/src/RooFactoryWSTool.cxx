@@ -39,7 +39,6 @@
 #include "TClass.h"
 #include "TClassTable.h"
 #include "RooAbsPdf.h"
-#include "RooGaussian.h"
 #include <fstream>
 #include <vector>
 #include <string>
