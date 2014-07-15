@@ -167,7 +167,6 @@ Bool_t TProtoClass::FillTClass(TClass* cl) {
             int autoparsingOldval=gInterpreter->SetClassAutoparsing(false);
             // Disable autoparsing which might be triggered par the use of ResolvedTypedef.
             currentRDClass = TClass::GetClass(element->GetName(), false /* Load */ );
-            gInterpreter->SetClassAutoparsing(autoparsingOldval);
             if (!currentRDClass && !element->TestBit(TRealData::kTransient)) {
                if (gDebug>1)
                   Info("FillTClass()",
@@ -175,6 +174,7 @@ Bool_t TProtoClass::FillTClass(TClass* cl) {
                        element->GetName());
                currentRDClass = new TClass(element->GetName(),1,TClass::kForwardDeclared, true /*silent*/);
             }
+            gInterpreter->SetClassAutoparsing(autoparsingOldval);
          } else {
             if (!currentRDClass) continue;
             TProtoRealData* prd = (TProtoRealData*)element;
