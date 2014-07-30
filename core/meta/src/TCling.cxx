@@ -789,7 +789,7 @@ TCling::TCling(const char *name, const char *title)
 : TInterpreter(name, title), fGlobalsListSerial(-1), fInterpreter(0),
    fMetaProcessor(0), fNormalizedCtxt(0), fPrevLoadedDynLibInfo(0),
    fClingCallbacks(0), fAutoLoadCallBack(0),
-   fTransactionCount(0), fHeaderParsingOnDemand(true)
+   fTransactionCount(0), fHeaderParsingOnDemand(getenv("HEADER_PARSING_ON_DEMAND"))
 {
    // Initialize the cling interpreter interface.
 
@@ -7066,6 +7066,7 @@ TType::operator=(const TType& rhs)
    return *this;
 }
 
+#include <iostream>
 TType::TType(const std::type_info& ti)
    : fInterp(0), fTypeInfo(0)
 {
