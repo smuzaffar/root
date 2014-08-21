@@ -700,7 +700,6 @@ TF1::TF1(const char *name,Double_t (*fcn)(Double_t *, Double_t *), Double_t xmin
       gROOT->GetListOfFunctions()->Remove(f1old);
       gROOT->GetListOfFunctions()->Add(this);
    }
-
    if (!gStyle) return;
    SetLineColor(gStyle->GetFuncColor());
    SetLineWidth(gStyle->GetFuncWidth());

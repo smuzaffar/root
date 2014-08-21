@@ -1305,10 +1305,10 @@ void TFormula::Analyze(const char *schain, Int_t &err, Int_t offset)
                   // Look for an already defined expression
 
                   if (find==0) {
-                     {
+		     {
                         R__LOCKGUARD2(gROOTMutex);
-                        oldformula = (const TFormula*)gROOT->GetListOfFunctions()->FindObject((const char*)chaine);
-                     }
+		        oldformula = (const TFormula*)gROOT->GetListOfFunctions()->FindObject((const char*)chaine);
+		     }
                      if (oldformula && strcmp(schain,oldformula->GetTitle())) {
                         Int_t nprior = fNpar;
                         Analyze(oldformula->GetExpFormula(),err,fNpar);
