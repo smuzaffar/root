@@ -56,7 +56,7 @@
 #  endif
 #endif
 #if defined(R__LINUX) || defined(R__AIX)
-#  define R__HAS___THREAD
+#    define R__HAS_PTHREAD
 #endif
 #if defined(R__SOLARIS) && !defined(R__HAS_PTHREAD)
 #  define R__HAS_PTHREAD
