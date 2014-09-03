@@ -391,7 +391,7 @@ Float_t TMVA::DecisionTreeNode::GetSampleMin(UInt_t ivar) const {
    // return the minimum of variable ivar from the training sample
    // that pass/end up in this node
    if (fTrainInfo && ivar < fTrainInfo->fSampleMin.size()) return fTrainInfo->fSampleMin[ivar];
-   else *fgLogger << kFATAL << "You asked for Min of the event sample in node for variable "
+   else Log() << kFATAL << "You asked for Min of the event sample in node for variable "
                   << ivar << " that is out of range" << Endl;
    return -9999;
 }
@@ -401,7 +401,7 @@ Float_t TMVA::DecisionTreeNode::GetSampleMax(UInt_t ivar) const {
    // return the maximum of variable ivar from the training sample
    // that pass/end up in this node
    if (fTrainInfo && ivar < fTrainInfo->fSampleMin.size()) return fTrainInfo->fSampleMax[ivar];
-   else *fgLogger << kFATAL << "You asked for Max of the event sample in node for variable "
+   else Log() << kFATAL << "You asked for Max of the event sample in node for variable "
                   << ivar << " that is out of range" << Endl;
    return 9999;
 }
