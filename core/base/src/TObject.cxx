@@ -47,6 +47,7 @@ class hierarchies (watch out for overlaps).
 #include "TObjString.h"
 #include "TRefTable.h"
 #include "TProcessID.h"
+#include "TVirtualMutex.h"
 
 Long_t TObject::fgDtorOnly = 0;
 Bool_t TObject::fgObjectStat = kTRUE;
@@ -147,6 +148,7 @@ TObject::~TObject()
       if (root->MustClean()) {
          if (root == this) return;
          if (TestBit(kMustCleanup)) {
+            R__LOCKGUARD2(gROOTMutex);
             root->GetListOfCleanups()->RecursiveRemove(this);
          }
       }

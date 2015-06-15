@@ -381,6 +381,7 @@ End_Macro
 #include "TBranchSTL.h"
 #include "TSchemaRuleSet.h"
 #include "TFileMergeInfo.h"
+#include "TVirtualMutex.h"
 
 #include <cstddef>
 #include <fstream>
@@ -850,7 +851,10 @@ TTree::~TTree()
    }
    if (fClones) {
       // Clone trees should no longer be removed from fClones when they are deleted.
-      gROOT->GetListOfCleanups()->Remove(fClones);
+     {
+        R__LOCKGUARD2(gROOTMutex);
+        gROOT->GetListOfCleanups()->Remove(fClones);
+     }
       // Note: fClones does not own its content.
       delete fClones;
       fClones = 0;
@@ -1074,7 +1078,10 @@ void TTree::AddClone(TTree* clone)
       fClones->SetOwner(false);
       // So that the clones are automatically removed from the list when
       // they are deleted.
-      gROOT->GetListOfCleanups()->Add(fClones);
+      {
+         R__LOCKGUARD2(gROOTMutex);
+         gROOT->GetListOfCleanups()->Add(fClones);
+      }
    }
    if (!fClones->FindObject(clone)) {
       fClones->Add(clone);
