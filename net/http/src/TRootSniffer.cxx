@@ -32,6 +32,7 @@
 #include "TUrl.h"
 #include "TImage.h"
 #include "RZip.h"
+#include "TVirtualMutex.h"
 
 #include "TRootSnifferStore.h"
 
@@ -1474,9 +1475,11 @@ Bool_t TRootSniffer::RegisterObject(const char *subfolder, TObject *obj)
    dabcfold->Add(obj);
 
    // register folder for cleanup
-   if (!gROOT->GetListOfCleanups()->FindObject(dabcfold))
-      gROOT->GetListOfCleanups()->Add(dabcfold);
-
+   {
+      R__LOCKGUARD2(gROOTMutex);
+      if (!gROOT->GetListOfCleanups()->FindObject(dabcfold))
+         gROOT->GetListOfCleanups()->Add(dabcfold);
+   }
    return kTRUE;
 }
 

@@ -55,6 +55,7 @@
 #include "TEntryListFromFile.h"
 #include "TFileStager.h"
 #include "TFilePrefetch.h"
+#include "TVirtualMutex.h"
 
 const Long64_t theBigNumber = Long64_t(1234567890)<<28;
 
@@ -93,6 +94,7 @@ TChain::TChain()
    gROOT->GetListOfDataSets()->Add(this);
 
    // Make sure we are informed if the TFile is deleted.
+   R__LOCKGUARD2(gROOTMutex);
    gROOT->GetListOfCleanups()->Add(this);
 }
 
@@ -164,6 +166,7 @@ TChain::TChain(const char* name, const char* title)
    gROOT->GetListOfDataSets()->Add(this);
 
    // Make sure we are informed if the TFile is deleted.
+   R__LOCKGUARD2(gROOTMutex);
    gROOT->GetListOfCleanups()->Add(this);
 }
 
@@ -172,7 +175,10 @@ TChain::TChain(const char* name, const char* title)
 
 TChain::~TChain()
 {
-   gROOT->GetListOfCleanups()->Remove(this);
+   {
+      R__LOCKGUARD2(gROOTMutex);
+      gROOT->GetListOfCleanups()->Remove(this);
+   }
 
    SafeDelete(fProofChain);
    fStatus->Delete();
@@ -2790,7 +2796,10 @@ void TChain::Streamer(TBuffer& b)
 {
    if (b.IsReading()) {
       // Remove using the 'old' name.
-      gROOT->GetListOfCleanups()->Remove(this);
+      {
+         R__LOCKGUARD2(gROOTMutex);
+         gROOT->GetListOfCleanups()->Remove(this);
+      }
 
       UInt_t R__s, R__c;
       Version_t R__v = b.ReadVersion(&R__s, &R__c);
@@ -2811,7 +2820,10 @@ void TChain::Streamer(TBuffer& b)
          //====end of old versions
       }
       // Re-add using the new name.
-      gROOT->GetListOfCleanups()->Add(this);
+      {
+         R__LOCKGUARD2(gROOTMutex);
+         gROOT->GetListOfCleanups()->Add(this);
+      }
 
    } else {
       b.WriteClassBuffer(TChain::Class(),this);
