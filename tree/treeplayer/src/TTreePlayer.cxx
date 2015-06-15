@@ -76,6 +76,7 @@ extra libraries (Histogram, display, etc).
 #include "TVirtualMonitoring.h"
 #include "TTreeCache.h"
 #include "TStyle.h"
+#include "TVirtualMutex.h"
 
 #include "HFitInterface.h"
 #include "Foption.h"
@@ -111,7 +112,10 @@ TTreePlayer::TTreePlayer()
    fInput->Add(new TNamed("varexp",""));
    fInput->Add(new TNamed("selection",""));
    fSelector->SetInputList(fInput);
-   gROOT->GetListOfCleanups()->Add(this);
+   {
+      R__LOCKGUARD2(gROOTMutex);
+      gROOT->GetListOfCleanups()->Add(this);
+   }
    TClass::GetClass("TRef")->AdoptReferenceProxy(new TRefProxy());
    TClass::GetClass("TRefArray")->AdoptReferenceProxy(new TRefArrayProxy());
 }
@@ -126,6 +130,7 @@ TTreePlayer::~TTreePlayer()
    DeleteSelectorFromFile();
    fInput->Delete();
    delete fInput;
+   R__LOCKGUARD2(gROOTMutex);
    gROOT->GetListOfCleanups()->Remove(this);
 }
 
