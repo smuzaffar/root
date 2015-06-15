@@ -40,6 +40,7 @@
 #include "TClassRef.h"
 #include "TROOT.h"
 #include "TMemFile.h"
+#include "TVirtualMutex.h"
 
 #ifdef WIN32
 // For _getmaxstdio
@@ -100,6 +101,7 @@ TFileMerger::TFileMerger(Bool_t isLocal, Bool_t histoOneGo)
    fExcessFiles = new TList;
    fExcessFiles->SetOwner(kTRUE);
 
+   R__LOCKGUARD2(gROOTMutex);
    gROOT->GetListOfCleanups()->Add(this);
 }
 
@@ -108,7 +110,10 @@ TFileMerger::TFileMerger(Bool_t isLocal, Bool_t histoOneGo)
 
 TFileMerger::~TFileMerger()
 {
-   gROOT->GetListOfCleanups()->Remove(this);
+   {
+      R__LOCKGUARD2(gROOTMutex);
+      gROOT->GetListOfCleanups()->Remove(this);
+   }
    SafeDelete(fFileList);
    SafeDelete(fMergeList);
    SafeDelete(fOutputFile);
