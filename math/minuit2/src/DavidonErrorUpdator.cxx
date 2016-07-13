@@ -57,7 +57,7 @@ MinimumError DavidonErrorUpdator::Update(const MinimumState& s0,
 #endif
       return s0.Error();
    }
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
    if (delgam < 0)  MN_INFO_MSG("DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line");
 #endif
 

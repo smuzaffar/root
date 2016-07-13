@@ -26,7 +26,7 @@ MnGlobalCorrelationCoeff::MnGlobalCorrelationCoeff(const MnAlgebraicSymMatrix& c
    MnAlgebraicSymMatrix inv(cov);
    int ifail = Invert(inv);
    if(ifail != 0) {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
       MN_INFO_MSG("MnGlobalCorrelationCoeff: inversion of matrix fails.");
 #endif
       fValid = false;

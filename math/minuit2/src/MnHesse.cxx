@@ -321,7 +321,7 @@ L30:
    if(tmpErr.IsMadePosDef()) {
       MinimumError err(vhmat, MinimumError::MnMadePosDef() );
       double edm = estim.Estimate(gr, err);
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
       MN_INFO_MSG("MnHesse: matrix was forced pos. def. ");
 #endif
       return MinimumState(st.Parameters(), err, gr, edm, mfcn.NumOfCalls());

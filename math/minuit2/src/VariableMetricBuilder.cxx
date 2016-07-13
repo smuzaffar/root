@@ -170,14 +170,14 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
             double machineLimit = fabs(seed.Precision().Eps2()*result.back().Fval());
             if (edm >= machineLimit)   {
                iterate = true;
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
                MN_INFO_MSG("VariableMetricBuilder: Tolerance is not sufficient, continue the minimization");
                MN_INFO_VAL2("Current  Edm is",edm);
                MN_INFO_VAL2("Required Edm is",edmval);
 #endif
             }
             else {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
                MN_INFO_MSG("VariableMetricBuilder: Stop the minimization - reached machine accuracy limit");
                MN_INFO_VAL2("Edm is smaller than machine accuracy",machineLimit);
                MN_INFO_VAL2("Current  Edm is",edm);
@@ -204,14 +204,14 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
    // and check edm (add a factor of 10 in tolerance )
    if (edm > 10*edmval) {
       min.Add( result.back(), FunctionMinimum::MnAboveMaxEdm() );
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
       MN_INFO_VAL2("VariableMetricBuilder: INVALID function minimum - edm is above tolerance,",edm);
       MN_INFO_VAL2("VariableMetricBuilder: Required tolerance  is 10 x edmval ",edmval);
 #endif
    }
    else {
       // check if minimum has edm above max before
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
       if ( min.IsAboveMaxEdm() ) {
          MN_INFO_MSG("VariableMetricBuilder: Edm has been re-computed after Hesse");
          MN_INFO_VAL2("new value is now smaller than the required tolerance,",edm);
@@ -296,7 +296,7 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
 
 
       if(gdel > 0.) {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
          MN_INFO_MSG("VariableMetricBuilder: matrix not pos.def, gdel > 0");
          MN_INFO_VAL(gdel);
 #endif
@@ -321,7 +321,7 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
 
       // <= needed for case 0 <= 0
       if(fabs(pp.Y() - s0.Fval()) <=  fabs(s0.Fval())*prec.Eps() ) {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
          MN_INFO_MSG("VariableMetricBuilder: no improvement in line search");
 #endif
          // no improvement exit   (is it really needed LM ? in vers. 1.22 tried alternative )
@@ -354,14 +354,14 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
 
 
       if(edm < 0.) {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
          MN_INFO_MSG("VariableMetricBuilder: matrix not pos.def. : edm is < 0. Make pos def...");
 #endif
          MnPosDef psdf;
          MinimumState s0new = psdf(s0, prec);
          edm = Estimator().Estimate(g, s0new.Error());
          if(edm < 0.) {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
             MN_INFO_MSG("VariableMetricBuilder: matrix still not pos.def. : exit iterations ");
 #endif
             AddResult(result, s0new);
@@ -405,7 +405,7 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
 
 
    if(fcn.NumOfCalls() >= maxfcn) {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
       MN_INFO_MSG("VariableMetricBuilder: call limit exceeded.");
 #endif
       return FunctionMinimum(seed, result, fcn.Up(), FunctionMinimum::MnReachedCallLimit());
@@ -413,14 +413,14 @@ FunctionMinimum VariableMetricBuilder::Minimum(const MnFcn& fcn, const GradientC
 
    if(edm > edmval) {
       if(edm < fabs(prec.Eps2()*result.back().Fval())) {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
          MN_INFO_MSG("VariableMetricBuilder: machine accuracy limits further improvement.");
 #endif
          return FunctionMinimum(seed, result, fcn.Up());
       } else if(edm < 10*edmval) {
          return FunctionMinimum(seed, result, fcn.Up());
       } else {
-#ifdef WARNINGMSG
+#ifdef CMS_WARNINGMSG
          MN_INFO_MSG("VariableMetricBuilder: iterations finish without convergence.");
          MN_INFO_VAL2("VariableMetricBuilder",edm);
          MN_INFO_VAL2("            requested",edmval);
